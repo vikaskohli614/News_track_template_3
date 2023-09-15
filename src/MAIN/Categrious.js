@@ -98,8 +98,7 @@ const Categrious = ({ agencyDetails }) => {
                                                         .map((news, index) => {
                                                             return (
                                                                 <div key={index} className="col-md-6"  
-                                                                    style={{width: "326px",
-                                                                        height: "193px"}}
+                                                                    style={{width: "280px",height: "200px"}}
                                                                     onClick={() => {
                                                                         // console.log("Img clicked");
                                                                         navigate(
