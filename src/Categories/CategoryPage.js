@@ -93,7 +93,8 @@ function CategoryPage() {
                                                 bottom: "10px",
                                                 left: "50%",
                                                 transform: "translate(-50%)",
-                                                width:'50%'
+                                                width:'50%',
+                                                background:"#0d6efd"
                                             }}
                                             className="btn btn-primary w-10 "
                                             onClick={() => {

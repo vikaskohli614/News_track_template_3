@@ -98,6 +98,8 @@ const Categrious = ({ agencyDetails }) => {
                                                         .map((news, index) => {
                                                             return (
                                                                 <div key={index} className="col-md-6"  
+                                                                    style={{width: "326px",
+                                                                        height: "193px"}}
                                                                     onClick={() => {
                                                                         // console.log("Img clicked");
                                                                         navigate(
@@ -112,8 +114,10 @@ const Categrious = ({ agencyDetails }) => {
                                                                     }}>
                                                                     <div className="image">
                                                                         <img
+                                                                            
                                                                             src={`http://174.138.101.222:8080${news.image}`}
                                                                             alt={news.title}
+
                                                                         />
                                                                         <div className="cn-title">
                                                                             <a>

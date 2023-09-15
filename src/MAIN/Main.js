@@ -47,7 +47,7 @@ const Main = ({ agencyDetails, breakingNews, page_name }) => {
 
 
   return (
-    <div className="container">
+    <div className="container" style={{marginBottom:"20px"}} >
       <div className="row " >
         <div className="col-md-8 col-sm-12">
           <div style={{ maxHeight: '400px' }}>

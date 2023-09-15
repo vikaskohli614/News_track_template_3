@@ -76,7 +76,8 @@ const Top = ({ page_name }) => {
 
 
       {/* <!-- Brand Start --> */}
-      <div class="brand" style={{ marginBottom: "26px" }}>
+      <div style={{marginBottom:"56px"}}>
+      <div class="brand" >
         <div class="container" >
           <div className="row ">
             <div className="col-sm-4">
@@ -100,10 +101,12 @@ const Top = ({ page_name }) => {
         </div>
       </div>
 
+      </div>
+
 
       {/* <!-- Nav Bar Start -->         */}
 
-      <div className="nav-bar">
+      <div className="nav-bar" style={{marginBottom:"20px"}}>
         <div className="container">
           <nav className="navbar navbar-expand-md bg-dark navbar-dark">
             <a href="#" className="navbar-brand">
