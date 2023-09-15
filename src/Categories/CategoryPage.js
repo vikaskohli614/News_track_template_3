@@ -1,5 +1,4 @@
-// import Topbar from "../Template/Topbar";
-// import Navbar from "../Template/Navbar";
+
 import axios from "axios";
 import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
@@ -88,14 +87,15 @@ function CategoryPage() {
                                         >
                                             {item.short_details}
                                         </p>
-                                        <a
+                                        <button 
                                             style={{
                                                 position: "absolute",
                                                 bottom: "10px",
                                                 left: "50%",
                                                 transform: "translate(-50%)",
+                                                width:'50%'
                                             }}
-                                            className="btn btn-primary mx-auto d-flex justify-content-center "
+                                            className="btn btn-primary w-10 "
                                             onClick={() => {
                                                 navigate(`/${id}/DetailedNews/${item._id}`, {
                                                     state: {
@@ -106,7 +106,7 @@ function CategoryPage() {
                                             }}
                                         >
                                             Read In Detail
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             );
