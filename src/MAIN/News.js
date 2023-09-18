@@ -68,11 +68,11 @@ const News = ({ props, page_name }) => {
                                                                 objectFit: "fill",
                                                             }}
                                                         />
-                                                        {/* <img src="http://174.138.101.222:8080/image/image_1693986860740.jpg" /> */}
                                                     </div>
                                                     <div className="tn-title">
-                                                        <a href="">
-                                                            {news.title} scasjc</a>
+                                                        <Link
+                                                         to={`/${id}/DetailedNews/${news._id}`}>
+                                                            {news.title} </Link>
                                                     </div>
                                                 </div>
                                             )

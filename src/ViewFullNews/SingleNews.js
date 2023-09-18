@@ -107,7 +107,7 @@ const SingleNews = ({ prop }) => {
                     <div className="mb-3">
                       <a href="">{prop.category}</a>
                       <span className="px-1">/</span>
-                      <span>{dateConverter(prop.schedule_date)}</span>
+                      <span>{dateConverter(prop.createdAt)}</span>
                     </div>
                     <div>
                       <h3 className="mb-3">{prop.title}</h3>
