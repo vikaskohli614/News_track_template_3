@@ -6,7 +6,7 @@ import advertisment from '../img/advertisment1.jpg'
 const News = ({ props, page_name }) => {
 
     const { id } = useParams();
-    const [breakingNews, setBreakingNews] = useState();
+    const [breakingNews, setBreakingNews] = useState([]);
     const fetchBreakingNews = async () => {
         try {
             const response = await axios.get(
@@ -36,6 +36,36 @@ const News = ({ props, page_name }) => {
         fetchAd();
     }, [id, page_name])
 
+    // pagination start here 
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5; // Number of items to display per page
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const itemsToShow = breakingNews.slice(startIndex, endIndex);
+
+    const handleNextPage = () => {
+        if (endIndex < breakingNews.length) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (startIndex > 0) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const handlePageClick = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const totalPages = Math.ceil(breakingNews.length / itemsPerPage);
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+
+
     return (
         <>
             <div className="tab-news">
@@ -51,8 +81,8 @@ const News = ({ props, page_name }) => {
                             </ul>
                             <div className="tab-content">
                                 <div id="featured" className="container tab-pane active">
-                                    {breakingNews &&
-                                        breakingNews.map((news, index) => {
+                                    {itemsToShow &&
+                                        itemsToShow.map((news, index) => {
                                             return (
                                                 <div key={index} className="tn-news">
                                                     <div className="tn-img">
@@ -71,12 +101,53 @@ const News = ({ props, page_name }) => {
                                                     </div>
                                                     <div className="tn-title">
                                                         <Link
-                                                         to={`/${id}/DetailedNews/${news._id}`}>
-                                                            {news.title} </Link>
+                                                            to={`/${id}/DetailedNews/${news._id}`}>
+                                                            {news.title.length > 130
+                                                                ? `${news.title.substring(0, 130)}...`
+                                                                : news.title}
+                                                        </Link>
                                                     </div>
                                                 </div>
                                             )
                                         })}
+                                    <div style={{
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        marginTop: '5px'
+                                    }}>
+                                        <nav aria-label="Page navigation example">
+                                            <ul className="pagination">
+                                                <li className="page-item">
+                                                    <a className="page-link"
+                                                        onClick={handlePrevPage}
+                                                        disabled={currentPage === 1}>
+                                                        <i className="fa fa-angle-left text-primary mr-2" />
+                                                        <i className="fa fa-angle-left text-primary mr-2" />
+                                                    </a>
+                                                </li>
+                                                {pageNumbers.map((pageNumber) => (
+                                                    <li className="page-item">
+                                                        <a
+                                                            key={pageNumber}
+                                                            className={`page-link page-number-button ${pageNumber === currentPage ? 'active' : ''}`}
+                                                            onClick={() => handlePageClick(pageNumber)}
+                                                        >
+                                                            {pageNumber}
+                                                        </a>
+                                                    </li>
+                                                ))}
+                                                <li className="page-item">
+                                                    <a className="page-link"
+                                                        onClick={handleNextPage}
+                                                        disabled={endIndex >= breakingNews.length}>
+                                                        <i className="fa fa-angle-right text-primary mr-2" />
+                                                        <i className="fa fa-angle-right text-primary mr-2" />
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -86,7 +157,6 @@ const News = ({ props, page_name }) => {
                                     <h4>advertisement</h4>
                                 </div>
                                 <div className="image">
-                                    {/* <img src={advertisment} alt="" /> */}
                                     <img src={`http://174.138.101.222:8080${ad?.image}`} alt="Ads" />
                                 </div>
                                 <div style={{ margin: "20px  0px 10px 0px" }}>
@@ -97,13 +167,9 @@ const News = ({ props, page_name }) => {
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
-
                 </div>
             </div>
-
         </>
     )
 }

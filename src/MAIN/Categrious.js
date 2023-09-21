@@ -35,8 +35,6 @@ const Categrious = ({ agencyDetails }) => {
 
             setData((prevData) => [...prevData, ...newData]);
             setFetch(true);
-
-            // console.log("data fetched");
         } catch (error) {
             console.log(error);
         }
@@ -48,7 +46,6 @@ const Categrious = ({ agencyDetails }) => {
             const response = await axios.get(
                 "http://174.138.101.222:8080/getmastercategories"
             );
-            // console.log(response.data.data, "categories");
             setCategory(response.data.data);
 
             response.data.data.map((item) => {
@@ -58,7 +55,6 @@ const Categrious = ({ agencyDetails }) => {
             console.log(error);
         }
     };
-    // console.log(input, "input");
     useEffect(() => {
         getCategories();
         getData(input);
@@ -77,13 +73,44 @@ const Categrious = ({ agencyDetails }) => {
     }
 
 
+    // pagination start here 
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6; // Number of items to display per page
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const itemsToShow = data.slice(startIndex, endIndex);
+
+    const handleNextPage = () => {
+        if (endIndex < data.length) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (startIndex > 0) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const handlePageClick = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const totalPages = Math.ceil(data.length / itemsPerPage);
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+
+
+
     return (
         <>
             <div className="cat-news">
                 <div className="container">
                     <div className="row">
                         {fetch &&
-                            data.map((item, index) => {
+                            itemsToShow.map((item, index) => {
                                 return (
                                     <>
                                         {item.data.length > 0 && (
@@ -97,10 +124,9 @@ const Categrious = ({ agencyDetails }) => {
                                                         .slice(0, 2)
                                                         .map((news, index) => {
                                                             return (
-                                                                <div key={index} className="col-md-6"  
-                                                                    style={{width: "280px",height: "200px"}}
+                                                                <div key={index} className="col-md-6"
+                                                                    style={{ width: "280px", height: "200px" }}
                                                                     onClick={() => {
-                                                                        // console.log("Img clicked");
                                                                         navigate(
                                                                             `/${agencyDetails._id}/DetailedNews/${news._id}`,
                                                                             {
@@ -113,7 +139,7 @@ const Categrious = ({ agencyDetails }) => {
                                                                     }}>
                                                                     <div className="image">
                                                                         <img
-                                                                            
+
                                                                             src={`http://174.138.101.222:8080${news.image}`}
                                                                             alt={news.title}
 
@@ -133,60 +159,45 @@ const Categrious = ({ agencyDetails }) => {
                                     </>
                                 );
                             })}
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                            <nav aria-label="Page navigation example">
+                                <ul className="pagination">
+                                    <li className="page-item">
+                                        <a className="page-link"
+                                            onClick={handlePrevPage}
+                                            disabled={currentPage === 1}>
+                                            <i className="fa fa-angle-left text-primary mr-2" />
+                                            <i className="fa fa-angle-left text-primary mr-2" />
+                                        </a>
+                                    </li>
+                                    {pageNumbers.map((pageNumber) => (
+                                        <li className="page-item">
+                                            <a
+                                                key={pageNumber}
+                                                className={`page-link page-number-button ${pageNumber === currentPage ? 'active' : ''}`}
+                                                onClick={() => handlePageClick(pageNumber)}
+                                            >
+                                                {pageNumber}
+                                            </a>
+                                        </li>
+                                    ))}
+                                    <li className="page-item">
+                                        <a className="page-link"
+                                            onClick={handleNextPage}
+                                            disabled={endIndex >= data.length}>
+                                            <i className="fa fa-angle-right text-primary mr-2" />
+                                            <i className="fa fa-angle-right text-primary mr-2" />
+                                        </a></li>
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </div>
-            {/* Category News Start*/}
-            {/* <div className="cat-news">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-6">
-                            <h2>खेल</h2>
-                            <div className="row cn-slider">
-                                <div className="col-md-6">
-                                    <div className="image">
-                                        <img src="http://174.138.101.222:8080/image/image_1692005820686.png" />
-                                        <div className="cn-title">
-                                            <a href="">प्रदेश में सबसे बड़ी इंदौर की चोइथराम सब्जी मंडी में व्यापारियों से 3 करोड़</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="image">
-                                        <img src="http://174.138.101.222:8080/image/image_1692005820686.png" />
-                                        <div className="cn-title">
-                                            <a href="">प्रदेश में सबसे बड़ी इंदौर की चोइथराम सब्जी मंडी में व्यापारियों से 3 करोड़</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <h2>मनोरंजन</h2>
-                            <div className="row cn-slider">
-                                <div className="col-md-6">
-                                    <div className="image">
-                                        <img src="http://174.138.101.222:8080/image/image_1692005820686.png" />
-                                        <div className="cn-title">
-                                            <a href="">प्रदेश में सबसे बड़ी इंदौर की चोइथराम सब्जी मंडी में व्यापारियों से 3 करोड़</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="image">
-                                        <img src="http://174.138.101.222:8080/image/image_1692005820686.png" />
-                                        <div className="cn-title">
-                                            <a href="">प्रदेश में सबसे बड़ी इंदौर की चोइथराम सब्जी मंडी में व्यापारियों से 3 करोड़</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> */}
         </>
 
     )

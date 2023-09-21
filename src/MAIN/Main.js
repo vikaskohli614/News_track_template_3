@@ -13,7 +13,7 @@ const Main = ({ agencyDetails, breakingNews, page_name }) => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const [categories, setCategory] = useState();
+  const [categories, setCategory] = useState([]);
   const getCategories = async () => {
     try {
       const response = await axios.get(
@@ -45,9 +45,40 @@ const Main = ({ agencyDetails, breakingNews, page_name }) => {
     getCategories();
   }, []);
 
+  // Pagination for categories
+  const [currentCategoryPage, setCurrentCategoryPage] = useState(1);
+  const categoryItemsPerPage = 8; // Number of categories to display per page
+
+  const startIndex = (currentCategoryPage - 1) * categoryItemsPerPage;
+  const endIndex = startIndex + categoryItemsPerPage;
+  const categoriesToShow = categories.slice(startIndex, endIndex);
+
+  const handleNextCategoryPage = () => {
+    if (endIndex < categories.length) {
+      setCurrentCategoryPage(currentCategoryPage + 1);
+    }
+  };
+
+  const handlePrevCategoryPage = () => {
+    if (startIndex > 0) {
+      setCurrentCategoryPage(currentCategoryPage - 1);
+    }
+  };
+
+  const handleCategoryPageClick = (pageNumber) => {
+    setCurrentCategoryPage(pageNumber);
+  };
+
+  const categoryTotalPages = Math.ceil(categories.length / categoryItemsPerPage);
+  const categoryPageNumbers = Array.from(
+    { length: categoryTotalPages },
+    (_, i) => i + 1
+  );
+
+
 
   return (
-    <div className="container" style={{marginBottom:"20px"}} >
+    <div className="container" style={{ marginBottom: "20px" }} >
       <div className="row " >
         <div className="col-md-8 col-sm-12">
           <div style={{ maxHeight: '400px' }}>
@@ -114,8 +145,8 @@ const Main = ({ agencyDetails, breakingNews, page_name }) => {
           <div className="d-flex align-items-center justify-content-between bg-light py-2 px-4 mb-1">
             <h3 className="m-0">Categories</h3>
           </div>
-          {categories &&
-            categories.map((item, index) => {
+          {categoriesToShow &&
+            categoriesToShow.map((item, index) => {
               return (
                 <div
                   key={index}
@@ -124,6 +155,7 @@ const Main = ({ agencyDetails, breakingNews, page_name }) => {
                     height: "11%",
                     backgroundColor: 'rgb(184 179 179)',
                     minHeight: "50px",
+                    marginTop:'10px'
                   }}
                   onClick={() =>
                     navigate(
@@ -135,12 +167,56 @@ const Main = ({ agencyDetails, breakingNews, page_name }) => {
                   }
                 >
 
-                  <p style={{textAlign:'center',marginTop:10}} className="overlay align-items-center justify-content-center h4 mb-0 text-white text-decoration-none">
+                  <p style={{ textAlign: 'center', marginTop: 10 }} className="overlay align-items-center justify-content-center h4 mb-0 text-white text-decoration-none">
                     {item.categories_Name_Hindi}
                   </p>
                 </div>
               );
             })}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop:'10px'
+            }}
+          >
+            <nav aria-label="Page navigation example">
+              <ul className="pagination">
+                <li className="page-item">
+                  <a
+                    className="page-link"
+                    onClick={handlePrevCategoryPage}
+                    disabled={currentCategoryPage === 1}
+                  >
+                    <i className="fa fa-angle-left text-primary mr-2" />
+                    <i className="fa fa-angle-left text-primary mr-2" />
+                  </a>
+                </li>
+                {categoryPageNumbers.map((pageNumber) => (
+                  <li className="page-item" key={pageNumber}>
+                    <a
+                      className={`page-link page-number-button ${pageNumber === currentCategoryPage ? 'active' : ''
+                        }`}
+                      onClick={() => handleCategoryPageClick(pageNumber)}
+                    >
+                      {pageNumber}
+                    </a>
+                  </li>
+                ))}
+                <li className="page-item">
+                  <a
+                    className="page-link"
+                    onClick={handleNextCategoryPage}
+                    disabled={endIndex >= categories.length}
+                  >
+                    <i className="fa fa-angle-right text-primary mr-2" />
+                    <i className="fa fa-angle-right text-primary mr-2" />
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
         </div>
       </div>
     </div>
